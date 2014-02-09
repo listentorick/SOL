@@ -1,7 +1,0 @@
-thoughts
-
-1) player now plans ships trajectories - cheap long flights vs expensive direct flights etc
-//thus the space ports has its own ships
-
-
-//draw a hoffman orbit
