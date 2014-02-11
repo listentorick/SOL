@@ -19,59 +19,52 @@ var Game = {};
         
         
         var solStar = this.solSys.addPlanet(
-            new Body({radius: 3, x: 0, y:0, vx:0, vy:0, mass: sunsMass, name:"sol", color: 'yellow'})
+            new Body({radius: 3, x: 0, y:0, vx:0, vy:0, mass: SUN_MASS, name:"sol", color: 'yellow'})
         );
-        
-        var v = Math.sqrt(G * sunsMass * 1 / mercuryOrbit);
         
         
         this.solSys.addPlanet(
-            new Body({radius: 1, x: mercuryOrbit, y:0, vx:0, vy:v, mass: mercuryMass, name: "mecury", color: 'green'}) // MERCURY
+            new Body({radius: 1, x: MERCURY_ORBIT, y:0, vx:0, vy: MERCURY_VELOCITY, mass: MERCURY_MASS, name: "mecury", color: 'green'}) // MERCURY
         );
-        
-        var v = Math.sqrt(G * sunsMass * 1 / venusOrbit);
-        
         
         this.solSys.addPlanet(
-            new Body({radius: 3, x: venusOrbit, y:0, vx:0, vy:v, mass: venusMass, name: "venus", color: 'brown'}) // venus
+            new Body({radius: 3, x: VENUS_ORBIT, y:0, vx:0, vy: VENUS_VELOCITY, mass: VENUS_MASS, name: "venus", color: 'brown'}) // venus
         );
         
-        var earthV = Math.sqrt(G * sunsMass * 1 / earthsOrbit);
+
         var earthPlanet = this.solSys.addPlanet(
-            new Body({radius: 5, x: earthsOrbit, y:0, vx:0, vy:earthV, mass: earthsMass, name:"earth", color: 'blue'}) // EARTH
+            new Body({radius: 5, x: EARTH_ORBIT, y:0, vx:0, vy:EARTH_VELOCITY, mass: EARTH_MASS, name:"earth", color: 'blue'}) // EARTH
         );
         
-        
-        var moonV =  Math.sqrt(G * earthsMass * 1 / (moonsOrbitAroundEarth)) + earthV;// + (Math.sqrt(G * earthsMass * 1 / (moonsOrbitAroundEarth)));
-
-        //var moonV = 1000.023;// km/s
         var moonPlanet = this.solSys.addPlanet(
-            new Body({radius: 2, x: moonsOrbitAroundEarth + earthsOrbit , y:0, vx:0, vy:moonV, mass: moonsMass, name:"moon", color: 'grey'}) // EARTH
+            new Body({radius: 2, x: EARTH_ORBIT-MOON_ORBIT , y:0, vx:0, vy:EARTH_VELOCITY- MOON_VELOCITY, mass: MOON_MASS, name:"moon", color: 'grey'}) // EARTH
         );
-        
-        
-        //Next steps:
-        //calculate barycentre of the earth moon system.... http://en.wikipedia.org/wiki/Barycentric_coordinates_(astronomy)
+       
 
-        
-        var v = Math.sqrt(G * sunsMass * 1 / marsOrbit);
-    
         var marsPlanet = this.solSys.addPlanet(
-            new Body({radius: 2, x: marsOrbit, y:0, vx:0, vy: v, mass: marsMass, name:"mars", color: 'red'}) // MARS
+            new Body({radius: 2, x: MARS_ORBIT, y:0, vx:0, vy: MARS_VELOCITY, mass: MARS_MASS, name:"mars", color: 'red'}) // MARS
         );
         
-        var v = Math.sqrt(G * sunsMass * 1 / jupiterOrbit);
-    
         var jupiterPlanet = this.solSys.addPlanet(
-            new Body({radius: 7, x: jupiterOrbit, y:0, vx:0, vy: v, mass: jupiterMass, name:"jupiter", color: 'orange'}) // MARS
+            new Body({radius: 10, x: JUPITER_ORBIT, y:0, vx:0, vy: JUPITER_VELOCITY, mass: JUPITER_MASS, name:"jupiter", color: 'grey'}) // MARS
         );
         
-        var v = Math.sqrt(G * sunsMass * 1 / saturnOrbit);
-    
-        this.solSys.addPlanet(
-            new Body({radius: 5, x: saturnOrbit, y:0, vx:0, vy: v, mass: saturnMass, name:"saturn", color: 'brown'}) // MARS
+        var saturnPlanet = this.solSys.addPlanet(
+            new Body({radius: 7, x: SATURN_ORBIT, y:0, vx:0, vy: SATURN_VELOCITY, mass: SATURN_MASS, name:"saturn", color: 'orange'}) // MARS
         );
         
+        var uranusPlanet = this.solSys.addPlanet(
+            new Body({radius: 7, x: URANUS_ORBIT, y:0, vx:0, vy: URANUS_VELOCITY, mass: URANUS_MASS, name:"uranus", color: 'grey'}) // MARS
+        );
+        
+        var neptunePlanet = this.solSys.addPlanet(
+            new Body({radius: 7, x: NEPTUNE_ORBIT, y:0, vx:0, vy:  NEPTUNE_VELOCITY, mass: NEPTUNE_MASS, name:"neptune", color: 'blue'}) // MARS
+        );
+        
+        var plutoPlanet = this.solSys.addPlanet(
+            new Body({radius: 1, x: PLUTO_ORBIT, y:0, vx:0, vy: PLUTO_VELOCITY, mass: PLUTO_MASS, name:"pluto", color: 'grey'}) // MARS
+        );
+
 
         this.canvas = new fabric.StaticCanvas('canvas');
 
@@ -82,7 +75,7 @@ var Game = {};
     };
     
     Game.fps= 50;
-
+    Game.fixedTimeStep = 30;
     Game.run = (function() {
         var loops = 0, skipTicks = 1000 / Game.fps,
         maxFrameSkip = 10,
@@ -95,8 +88,13 @@ var Game = {};
             
             while ( currentTime > nextGameTick && loops < maxFrameSkip) {
             
-                
-              dt = currentTime - lastTime;
+            
+              if(Game.fixedTimeStep) {
+                dt = Game.fixedTimeStep;
+              } else {
+                dt = currentTime - lastTime;
+              }
+
               lastTime  = currentTime;
              
               Game.update(dt);
