@@ -74,20 +74,39 @@ var Game = {};
     
     };
     
+    document.addEventListener('visibilitychange', function() {
+        var hidden = document.hidden || document.webkitHidden;
+        if(hidden==true) {
+            Game.paused = true;
+        }  else if(Game.paused) {
+            Game.wakeUp=true;
+        } 
+    });
+    
     Game.fps= 50;
+    Game.paused = false;
     Game.fixedTimeStep = 30;
     Game.run = (function() {
+      
         var loops = 0, skipTicks = 1000 / Game.fps,
         maxFrameSkip = 10,
         nextGameTick = (new Date).getTime();
         var lastTime = nextGameTick
 
         return function() {
+
+            if(Game.wakeUp==true) {
+                Game.paused = false;
+                Game.wakeUp = false;
+                nextGameTick = (new Date).getTime();
+            }
+            
+            if(Game.paused==true) return; //dont do anything
+
             loops = 0;
             currentTime = (new Date).getTime();
             
             while ( currentTime > nextGameTick && loops < maxFrameSkip) {
-            
             
               if(Game.fixedTimeStep) {
                 dt = Game.fixedTimeStep;
