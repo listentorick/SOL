@@ -4,6 +4,7 @@ SOL
 
 Implementation of SOL using Verlet integration.
 
-Moons orbit is currently unstable.
+Uses a fixed step.
 
+Demo: http://rawgithub.com/listentorick/SOL/master/index.html
 
