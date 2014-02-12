@@ -1,7 +1,7 @@
 //http://nssdc.gsfc.nasa.gov/planetary/factsheet/
 var G = 6.67 * Math.pow(10,-11);
 						
-var METER_TO_PIXEL = 7000000000;
+var METER_TO_PIXEL = 1000000000;
 
 var SUN_MASS = 1.9891 * Math.pow(10,30);
 

@@ -3,13 +3,13 @@ var Game = {};
     Game.draw = function() {
         this.solSysRender.render( this.solSys);
         
-        //this._hoffmanRenderer.render(this._hoffmanNavigation);
+        this._hoffmanRenderer.render(this._hoffmanNavigation);
         this.canvas.renderAll();
     };
     
     Game.update = function(dt) {
         this.solSys.update(dt);
-        //this._hoffmanNavigation.update(dt);
+        this._hoffmanNavigation.update(dt);
     };
     
     Game.start = function() {
@@ -71,6 +71,10 @@ var Game = {};
         this.camera = new Camera(1, this.canvas, solStar);
                         
         this.solSysRender = new SolarSystemRender(this.canvas, this.camera);
+        
+        this._hoffmanNavigation =  new HoffmanNavigation(solStar, earthPlanet, marsPlanet);
+        
+        this._hoffmanRenderer = new HoffmanNavigationRenderer(this.canvas)
     
     };
     
@@ -85,7 +89,7 @@ var Game = {};
     
     Game.fps= 50;
     Game.paused = false;
-    Game.fixedTimeStep = 30;
+    Game.fixedTimeStep = 3;
     Game.run = (function() {
       
         var loops = 0, skipTicks = 1000 / Game.fps,
